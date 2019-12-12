@@ -94,6 +94,7 @@ func main() {
 			IMSI: "123451234567891", MSISDN: "8130900000001", IMEI: "123456780000011",
 			Location: &v2.Location{MCC: "123", MNC: "45", RATType: v2.RATTypeEUTRAN, TAI: 0x0001, ECI: 0x00000101},
 		},
+		/*
 		&v2.Subscriber{
 			IMSI: "123451234567892", MSISDN: "8130900000002", IMEI: "123456780000012",
 			Location: &v2.Location{MCC: "123", MNC: "45", RATType: v2.RATTypeEUTRAN, TAI: 0x0002, ECI: 0x00000202},
@@ -110,6 +111,7 @@ func main() {
 			IMSI: "123451234567895", MSISDN: "8130900000005", IMEI: "123456780000015",
 			Location: &v2.Location{MCC: "123", MNC: "45", RATType: v2.RATTypeEUTRAN, TAI: 0x0005, ECI: 0x00000505},
 		},
+		*/
 	})
 
 	bearer := v2.NewBearer(5, "", &v2.QoSProfile{
@@ -169,7 +171,7 @@ func main() {
 				}
 				sess.AddTEID(it, enbTEID)
 
-				loggerCh <- fmt.Sprintf("Sent Modify Bearer Request for %s", imsi)
+				loggerCh <- fmt.Sprintf("MME Sent Modify Bearer Request for %s", imsi)
 				return
 			}()
 		// delete all the sessions after 30 seconds

@@ -163,6 +163,9 @@ func (m mockUEeNB) run(errCh chan error) {
 	go func(teid uint32, payload []byte, raddr net.Addr) {
 		for {
 			copy(payload[12:16], net.ParseIP(m.subscriberIP).To4())
+			loggerCh <- fmt.Sprintf("Wrote to gTPPPPP2")
+			//loggerCh <- fmt.Println(BytesToString(m.payload))
+			loggerCh <- fmt.Sprintf("----------------")
 			if _, err := uConn.WriteToGTP(teid, m.payload, raddr); err != nil {
 				errCh <- err
 				return

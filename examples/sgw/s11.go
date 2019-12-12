@@ -321,7 +321,7 @@ func handleModifyBearerRequest(s11Conn *v2.Conn, mmeAddr net.Addr, msg messages.
 	}
 
 	sgw.loggerCh <- fmt.Sprintf(
-		"Started listening on U-Plane for Subscriber: %s;\n\tS1-U: %s\n\tS5-U: %s",
+		"Started listening on U-Plane for Subscriber(Modify Response sent to MME): %s;\n\tS1-U: %s\n\tS5-U: %s",
 		s11Session.IMSI, *s1u, *s5u,
 	)
 	return nil

@@ -220,6 +220,7 @@ func handleCreateSessionRequest(c *v2.Conn, sgwAddr net.Addr, msg messages.Messa
 		buf := make([]byte, 1500)
 		for {
 			n, raddr, _, err := uConn.ReadFromGTP(buf)
+			loggerCh <- fmt.Sprintf("Read from to gTPPPPP2")
 			if err != nil {
 				return
 			}
