@@ -220,10 +220,11 @@ func handleCreateSessionRequest(c *v2.Conn, sgwAddr net.Addr, msg messages.Messa
 		buf := make([]byte, 1500)
 		for {
 			n, raddr, _, err := uConn.ReadFromGTP(buf)
-			loggerCh <- fmt.Sprintf("Read from to gTPPPPP2")
 			if err != nil {
 				return
 			}
+			loggerCh <- fmt.Sprintf("Read from mme")
+			loggerCh <- fmt.Sprintf("----------------");
 
 			rsp := make([]byte, n)
 			// update message type and checksum
@@ -237,10 +238,13 @@ func handleCreateSessionRequest(c *v2.Conn, sgwAddr net.Addr, msg messages.Messa
 			if _, err := uConn.WriteToGTP(teidOut, rsp, raddr); err != nil {
 				return
 			}
+			loggerCh <- fmt.Sprintf("==== teidOut: %x ====",teidOut)
+			loggerCh <- fmt.Sprintf("Write to mme teid:%x",teidOut)
+			loggerCh <- fmt.Sprintf("----------------")
 		}
 	}()
 
-	loggerCh <- fmt.Sprintf("Session created with S-GW for subscriber: %s;\n\tS5C S-GW: %s, TEID->: %#x, TEID<-: %#x",
+	loggerCh <- fmt.Sprintf("Session created with S-GW for subscriber: %s;\n\tS5C S-GW: %s, TEID(s5sgwTEID)->: %#x, TEID(s5pgwTEID)<-: %#x",
 		session.Subscriber.IMSI, sgwAddr, s5sgwTEID, s5pgwTEID,
 	)
 	return nil

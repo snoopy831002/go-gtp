@@ -163,13 +163,14 @@ func (m mockUEeNB) run(errCh chan error) {
 	go func(teid uint32, payload []byte, raddr net.Addr) {
 		for {
 			copy(payload[12:16], net.ParseIP(m.subscriberIP).To4())
-			loggerCh <- fmt.Sprintf("Wrote to gTPPPPP2")
-			//loggerCh <- fmt.Println(BytesToString(m.payload))
-			loggerCh <- fmt.Sprintf("----------------")
+
 			if _, err := uConn.WriteToGTP(teid, m.payload, raddr); err != nil {
 				errCh <- err
 				return
 			}
+			loggerCh <- fmt.Sprintf("MME write to gTP")
+			//loggerCh <- fmt.Println(BytesToString(m.payload))
+			loggerCh <- fmt.Sprintf("----------------")
 			time.Sleep(3 * time.Second)
 		}
 	}(m.teidOut, m.payload, m.raddr)
@@ -187,6 +188,9 @@ func (m mockUEeNB) run(errCh chan error) {
 				errCh <- err
 				return
 			}
+			loggerCh <- fmt.Sprintf("@@@@@@@@@@@@@@@Read from gTP")
+			//loggerCh <- fmt.Println(BytesToString(m.payload))
+			loggerCh <- fmt.Sprintf("----------------")
 			loggerCh <- fmt.Sprintf("Received from %s: %x", raddr, buf[:n])
 		}
 	})

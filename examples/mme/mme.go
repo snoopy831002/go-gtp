@@ -95,6 +95,7 @@ func handleCreateSessionResponse(c *v2.Conn, sgwAddr net.Addr, msg messages.Mess
 					return err
 				}
 				session.AddTEID(it, teid)
+				loggerCh <- fmt.Sprintf("==== UL teid: %x ====",teid)
 			}
 		}
 	} else {
@@ -108,7 +109,7 @@ func handleCreateSessionResponse(c *v2.Conn, sgwAddr net.Addr, msg messages.Mess
 
 	createdCh <- session.Subscriber.IMSI
 	loggerCh <- fmt.Sprintf(
-		"Session created with S-GW for Subscriber: %s;\n\tS11 S-GW: %s, TEID->: %#x, TEID<-: %#x",
+		"Session created with S-GW for Subscriber: %s;\n\tS11 S-GW: %s, TEID(s11sgwTEID)->:%#x, TEID(s11mmeTEID)<-: %#x",
 		session.Subscriber.IMSI, sgwAddr, s11sgwTEID, s11mmeTEID,
 	)
 	return nil
@@ -144,6 +145,7 @@ func handleModifyBearerResponse(c *v2.Conn, sgwAddr net.Addr, msg messages.Messa
 		payload:      payload,
 	}
 	if brCtxIE := mbRspFromSGW.BearerContextsModified; brCtxIE != nil {
+		loggerCh <- fmt.Sprintf("#### Range:%d",brCtxIE.ChildIEs)
 		for _, ie := range brCtxIE.ChildIEs {
 			switch ie.Type {
 			case ies.FullyQualifiedTEID:
@@ -155,6 +157,7 @@ func handleModifyBearerResponse(c *v2.Conn, sgwAddr net.Addr, msg messages.Messa
 					return err
 				}
 				teid, err := ie.TEID()
+				loggerCh <- fmt.Sprintf("==== DL teid: %x ====",teid)
 				if err != nil {
 					return err
 				}
@@ -168,6 +171,7 @@ func handleModifyBearerResponse(c *v2.Conn, sgwAddr net.Addr, msg messages.Messa
 				if err != nil {
 					return err
 				}
+				loggerCh <- fmt.Sprintf("Add one time")
 				mock.raddr = sgwUAddr
 				mock.teidOut = teid
 			}
