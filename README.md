@@ -85,6 +85,31 @@ For the detailed usage of specific version, see README.md under each version's d
 | GTPv1   | [README.md](v1/README.md) |
 | GTPv2   | [README.md](v2/README.md) |
 
+
+### Create GTP v1 connection
+
+See examples/mme/mme.go
+
+Fill in subscriber IP and payload
+```
+ mock := &mockUEeNB{
+    subscriberIP: session.GetDefaultBearer().SubscriberIP,
+    payload:      payload,
+ }
+```
+Also fill in sgw user plane address and teid
+
+```
+ mock.raddr = sgwUAddr
+ mock.teidOut = teid
+```
+Run it~
+
+```
+ go mock.run(errCh)
+
+```
+
 ## Supported Features
 
 Note that "supported" means that the package provides helpers which makes it easier to handle.
